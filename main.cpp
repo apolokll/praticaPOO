@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 class Produto{
 
@@ -35,16 +36,16 @@ class Produto{
         }
 
 
-        std::string getNome() {
+        std::string getNome() const {
             return nome;
         }
-        int getCodigo() {
+        int getCodigo() const {
             return codigo;
         }
-        double getPreco() {
+        double getPreco() const {
             return preco;
         }
-        int getQuantidadeEstoque() {
+        int getQuantidadeEstoque() const {
             return quantidadeEstoque;
         }
 
@@ -58,7 +59,7 @@ class Produto{
         void setPreco(double preco) {
             if (preco < 0)
             {
-                preco = 0;
+                this->preco = (preco < 0) ? 0.0 : preco;
             } else {
                 this->preco = preco;
             }
@@ -66,7 +67,7 @@ class Produto{
         void setQuantidadeEstoque(int quantidadeEstoque) {
             if (quantidadeEstoque < 0)
             {
-                quantidadeEstoque = 0;
+                this->quantidadeEstoque = 0;
             } else {
                 this->quantidadeEstoque = quantidadeEstoque;
             }
@@ -90,14 +91,14 @@ class Produto{
         }
 
         bool vender(int quantidade) {
-            if(temEstoque()) {
-                setQuantidadeEstoque(quantidadeEstoque - quantidade);
+            if (quantidade > 0 && quantidade <= quantidadeEstoque) {
+                quantidadeEstoque -= quantidade;
                 return true;
             }
-
-            std::cout << "Não há estoque suficiente para vender " << quantidade << " unidades do produto " << nome << std::endl;
+            std::cout << "Estoque insuficiente para vender " << quantidade << " unidades.\n";
             return false;
         }
+
 
         bool reporEstoque(int quantidade) {
             if(quantidade > 0) {
@@ -159,7 +160,7 @@ int main(){
         Produto("Açúcar", 5, 4.0, 8)
     };
 
-    int patrimonio = 0;
+    double patrimonio = 0.0;
     for(int i = 0; i < 5; i++) {
         produto[i].exibirInformacoes();
         patrimonio += produto[i].getPreco() * produto[i].getQuantidadeEstoque();
